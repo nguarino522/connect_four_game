@@ -17,7 +17,7 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 */
 
 function makeBoard() {
-  // set "board" to empty defaultHeight x defaultWidth matrix array
+  // set "board" to empty defaultHeight x defaultWidth matrix array 
   board = [...Array(defaultHeight)].map(e => Array(defaultWidth));
 }
 
@@ -62,6 +62,9 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let piece = document.createElement("div");
+  piece.classList.add("piece");
+  
 }
 
 /** endGame: announce game end */
