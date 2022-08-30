@@ -127,8 +127,10 @@ function checkForWin() {
     );
   }
 
-  // TODO: read and understand this code. Add comments to help you.
-  // 
+  // 2 nested for loops to iterate through the whole board, based on height and width of board
+  // sets each potential win condition array for 4 in a row (horizontal, vertical, diagonal 2 different directions)
+  // then based on each win condition we run the _win() function to check if any do match
+  // in the function we run an every method on the passed in array and if each entry matches the current player (returns true) the current players has won
   for (let y = 0; y < defaultHeight; y++) {
     for (let x = 0; x < defaultWidth; x++) {
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
