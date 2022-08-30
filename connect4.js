@@ -128,7 +128,7 @@ function checkForWin() {
   }
 
   // TODO: read and understand this code. Add comments to help you.
-
+  // 
   for (let y = 0; y < defaultHeight; y++) {
     for (let x = 0; x < defaultWidth; x++) {
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];

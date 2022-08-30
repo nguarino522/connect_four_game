@@ -1,9 +1,15 @@
-/* game board table */
+body {
+  background-color: azure;
+}
 
+/* game board table */
 #board td {
   width: 50px;
   height: 50px;
   border: solid 1px #666;
+  position: relative;
+  background-color: white;
+  
 }
 
 /* pieces are div within game table cells: draw as colored circles */
@@ -14,6 +20,8 @@
   width: 80%;
   height: 80%;
   border-radius: 50%;
+  animation: piecedrop;
+  animation-duration: 1s;
 }
 
 .p1 {
@@ -24,9 +32,6 @@
   background-color: blue;
 }
 
-
-/* TODO: make pieces red/blue,  depending on player 1/2 piece */
-
 /* column-top is table row of clickable areas for each column */
 
 #column-top td {
@@ -35,4 +40,25 @@
 
 #column-top td:hover {
   background-color: gold;
+}
+
+/* animation to drop piece from top to bottom */
+@keyframes piecedrop {
+  from {
+    transform: translateY(-500px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+#game {
+  justify-content: center;
+  margin: auto;
+  display: block;
+  width: fit-content;
+}
+
+h1 {
+  text-align: center;
 }
