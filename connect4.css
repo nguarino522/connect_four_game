@@ -21,7 +21,7 @@ body {
   height: 80%;
   border-radius: 50%;
   animation: piecedrop;
-  animation-duration: 1s;
+  animation-duration: 0.5s;
 }
 
 .p1 {
@@ -60,5 +60,9 @@ body {
 }
 
 h1 {
+  text-align: center;
+}
+
+#restartbtndiv {
   text-align: center;
 }
