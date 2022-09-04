@@ -5,12 +5,14 @@
  * board fills (tie)
 */
 class Game {
-  constructor(height = 6, width = 7) {
+  constructor(p1, p2, height = 6, width = 7) {
     this.height = height;
     this.width = width;
+    this.players = [p1, p2];
     this.makeBoard();
     this.makeHtmlBoard();
-    this.currPlayer = 1;
+    this.gameOver = false;
+    this.currPlayer = p1;
   }
 
 
@@ -34,11 +36,12 @@ class Game {
     let htmlBoard = document.createElement("table");
     htmlBoard.setAttribute("id", "board");
 
-    // TODO: add comment for this code
+    // create the top row used to select which colument to drop a current piece in and set event listener for click
     let top = document.createElement("tr");
     top.setAttribute("id", "column-top");
     top.addEventListener("click", this.handleClick.bind(this));
 
+    // create the top row for gameboard in html and append
     for (let x = 0; x < this.width; x++) {
       let headCell = document.createElement("td");
       headCell.setAttribute("id", x);
@@ -46,7 +49,7 @@ class Game {
     }
     htmlBoard.append(top);
 
-    // TODO: add comment for this code
+    // create
     for (let y = 0; y < this.height; y++) {
       const row = document.createElement("tr");
       for (let x = 0; x < this.width; x++) {
@@ -76,7 +79,8 @@ class Game {
   placeInTable(y, x) {
     // make a div and insert into correct table cell
     let piece = document.createElement("div");
-    piece.classList.add("piece", `p${this.currPlayer}`);
+    piece.classList.add("piece");
+    piece.style.backgroundColor = this.currPlayer.color;
     let cell = document.getElementById(`${y}-${x}`);
     cell.appendChild(piece);
   }
@@ -84,7 +88,7 @@ class Game {
   /** endGame: announce game end */
 
   endGame(msg) {
-    // pop up alert message with game result
+    // append ending game message and outcome underneath game board and a restart button to replay game
     let gameOutcome = document.getElementById("gameoutcome");
     let endgameMessage = document.createElement("h1");
     let restartBtn = document.createElement("button");
@@ -92,15 +96,17 @@ class Game {
     endgameMessage.innerText = msg;
     endgameMessage.setAttribute("id", "endgamemessage");
     restartBtn.innerText = "Restart Game";
-    restartBtn.setAttribute("id","restartbtn");
+    restartBtn.setAttribute("id", "restartbtn");
     restartBtn.addEventListener("click", () => {
       this.makeBoard();
       this.clearGameBoard();
-      this.makeHtmlBoard();
+      let p1 = new Player(document.getElementById('p1Color').value, 1);
+      let p2 = new Player(document.getElementById('p2Color').value, 2);
+      new Game(p1, p2);
     });
     restartBtnDiv.append(restartBtn);
     gameOutcome.append(endgameMessage);
-    
+
     let top = document.getElementById("column-top");
     top.removeEventListener("click", this.handleClick);
   }
@@ -108,6 +114,11 @@ class Game {
   /** handleClick: handle click of column top to play piece */
 
   handleClick(evt) {
+    //check for gameOver to prevent adding to board after game is complete
+    if (this.gameOver === true) {
+      return;
+    }
+
     // get x from ID of clicked cell
     let x = +evt.target.id;
 
@@ -123,15 +134,19 @@ class Game {
 
     // check for win
     if (this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer} won!`);
+      this.gameOver = true;
+      return this.endGame(`Player ${this.currPlayer.num} won!`);
     }
 
     // check for tie, check if all cells in board are filled; if so call endGame
     let result = this.board.every(row => row.every(cell => cell));
-    if (result === true) return this.endGame('The Game Was A Tie!');
+    if (result === true) {
+      this.gameOver = true;
+      return this.endGame('The Game Was A Tie!');
+    }
 
     // switch players, switch currPlayer 1 <-> 2
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.players[0] ? this.players[1] : this.players[0];
   }
 
   /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -149,7 +164,7 @@ class Game {
           x < this.width &&
           this.board[y][x] === this.currPlayer
       );
-    
+
 
     // 2 nested for loops to iterate through the whole board, based on this.height and this.width of board
     // sets each potential win condition array for 4 in a row (horizontal, vertical, diagonal 2 different directions)
@@ -176,11 +191,23 @@ class Game {
     gameOutcome.remove();
     restartBtn.remove();
     htmlTable.remove();
-
+    this.gameOver = false;
   }
 
 }
 
-new Game(6, 7);
+class Player {
+  constructor(color, num) {
+    this.color = color;
+    this.num = num;
+  }
+}
 
+document.getElementById('startbtn').addEventListener('click', function () {
+    let p1 = new Player(document.getElementById('p1Color').value, 1);
+    let p2 = new Player(document.getElementById('p2Color').value, 2);
+    new Game(p1, p2);
+    let startBtn = document.getElementById("startbtn");
+    startBtn.remove();
+});
 
